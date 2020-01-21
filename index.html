@@ -30,6 +30,9 @@
           </li>
           <li class="logged-out">
             <a href="#" class="grey-text modal-trigger" data-target="modal-signup">Sign up</a>
+            <li class="logged-in">
+              <a href="#" class="grey-text" id="signup-with-google">Sign up with Google</a>
+          </li>
           </li>
         </span>
       </ul>
@@ -123,6 +126,7 @@
     // make auth and firestore references
     const auth = firebase.auth();
     const db = firebase.firestore();
+    var provider = new firebase.auth.GoogleAuthProvider();
   </script>
 
   <!-- Compiled and minified JavaScript -->

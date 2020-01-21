@@ -60,3 +60,19 @@ loginForm.addEventListener('submit', (e) => {
         loginForm.reset();
     });
 });
+
+//sign up with Google
+const signupWithGoogle = document.querySelector('#signup-with-google');
+signupWithGoogle.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    firebase.auth().signInWithPopup(provider).then(function(result){
+        console.log(result)
+        console.log("Success google acount linked")
+
+    }).catch(function(err){
+        console.log(err)
+        console.log("Failed to link Google acount")
+
+    })
+});
