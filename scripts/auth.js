@@ -1,11 +1,3 @@
-// get data
-// get() is an a-synchronous task. It takes sometime to do it. It returns a promise. So we use the then()
-// which fires a callback function when the get() is completed. the callback function takes in the response from the get()
-// get() sends back a snapshot of this collection
-db.collection('guides').get().then(snapshot => {
-    setupGuides(snapshot.docs);
-});
-
 // listen for auth status changes
 // onAuthStateChanged takes a callback function which takes in a user as a parameter.
 // everytime there's outh state change (login or logout) this function right here is gonna
@@ -13,9 +5,17 @@ db.collection('guides').get().then(snapshot => {
 //if it's logout, we get back user=null.
 auth.onAuthStateChanged(user => {
     if (user) {
-        console.log('user logged in: ', user);
+        // get data
+        // get() is an a-synchronous task. It takes sometime to do it. It returns a promise. So we use the then()
+        // which fires a callback function when the get() is completed. the callback function takes in the response from the get()
+        // get() sends back a snapshot of this collection
+      db.collection('guides').get().then(snapshot => {
+        setupGuides(snapshot.docs);
+      });
+      setupUI(user)
     } else {
-        console.log('user looged out');
+      setupUI()
+      setupGuides([]);
     }
 });
 
