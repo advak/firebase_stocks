@@ -4,36 +4,38 @@
 // fire because we setup this listener. If the change is a user log in, we get user=user back,
 //if it's logout, we get back user=null.
 auth.onAuthStateChanged(user => {
+  // console.log(user);
     if (user) {
         // get data
         // get() is an a-synchronous task. It takes sometime to do it. It returns a promise. So we use the then()
         // which fires a callback function when the get() is completed. the callback function takes in the response from the get()
         // get() sends back a snapshot of this collection
-      db.collection('guides').get().then(snapshot => {
+      db.collection('guides').onSnapshot(snapshot => {
         setupGuides(snapshot.docs);
-      });
-      setupUI(user)
+        setupUI(user);
+      }, err => console.log(err.message));
     } else {
-      setupUI()
+      setupUI();
       setupGuides([]);
     }
 });
 
-// signup
-const signupForm = document.querySelector('#signup-form');
-signupForm.addEventListener('submit', (e) => {
-    e.preventDefault(); // prevernts the default closing of the signup form
+// create new guide
+const createForm = document.querySelector('#create-form');
+createForm.addEventListener('submit', (e) => {
+    e.preventDefault();
 
-    // get user info
-    const email = signupForm['signup-email'].value;
-    const password = signupForm['signup-password'].value;
-
-    // sign up the user
-    // The next line is an a-synchronous operation, it returns a promise
-    auth.createUserWithEmailAndPassword(email, password).then(cred => {
-        const modal = document.querySelector('#modal-signup');
-        M.Modal.getInstance(modal).close();
-        signupForm.reset();
+    db.collection('guides').add({
+      title: createForm['title'].value,
+      content: createForm['content'].value
+    }).then(() => {
+      // close the modal and reset form
+      const modal = document.querySelector('#modal-create');
+      M.Modal.getInstance(modal).close();
+      createForm.reset();
+    // for the case a user which is not logge in tried to created a guide
+    }).catch(err => {
+      console.log(err.message)
     })
 })
 
@@ -44,35 +46,32 @@ logout.addEventListener('click', (e) => {
     auth.signOut();
 })
 
-// login
-const loginForm = document.querySelector('#login-form');
-loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    // get user info
-    const email = loginForm['login-email'].value;
-    const password = loginForm['login-password'].value;
-
-    auth.signInWithEmailAndPassword(email, password).then(cred => {
-        // close the login modal and reset the form
-        const modal = document.querySelector('#modal-login');
-        M.Modal.getInstance(modal).close();
-        loginForm.reset();
-    });
-});
-
 //sign up with Google
 const signupWithGoogle = document.querySelector('#signup-with-google');
 signupWithGoogle.addEventListener('click', (e) => {
     e.preventDefault();
 
     firebase.auth().signInWithPopup(provider).then(function(result){
-        console.log(result)
-        console.log("Success google acount linked")
-
-    }).catch(function(err){
-        console.log(err)
-        console.log("Failed to link Google acount")
-
+      db.collection('portfolios').get().then(function(querySnapshot) {
+        if (querySnapshot.empty) {
+          db.collection('portfolios').add({
+            user_id: result.user.uid
+          });
+        } else {
+          querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            if (doc.data().user_id == result.user.uid) {
+              console.log(doc.id, " => ", doc.data().id);
+            } else {
+              db.collection('portfolios').add({
+                user_id: result.user.uid
+            });
+          }
+        });
+      }
     })
-});
+  }).catch(function(err){
+      console.log(err)
+      console.log("Failed to link Google acount")
+    });
+  });
