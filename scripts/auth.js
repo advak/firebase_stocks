@@ -10,13 +10,20 @@ auth.onAuthStateChanged(user => {
         // get() is an a-synchronous task. It takes sometime to do it. It returns a promise. So we use the then()
         // which fires a callback function when the get() is completed. the callback function takes in the response from the get()
         // get() sends back a snapshot of this collection
-      db.collection('guides').onSnapshot(snapshot => {
-        setupGuides(snapshot.docs);
-        setupUI(user);
+        db.collection('portfolios').get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            if (doc.data().user_id == user.uid) {
+              doc_id = doc.id
+              db.collection('portfolios').doc(doc_id).collection('stocks').onSnapshot(snapshot => {
+                setupStocks(snapshot.docs);
+                setupUI(user);
+              });
+            }
+          });
       }, err => console.log(err.message));
     } else {
       setupUI();
-      setupGuides([]);
+      setupStocks([]);
     }
 });
 

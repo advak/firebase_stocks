@@ -22,23 +22,28 @@ const setupUI = (user) => {
   }
 }
 
-//setup guides
-const setupGuides = (data) => {
+//setup stocks
+const setupStocks = (data) => {
+  var user = firebase.auth().currentUser
   if (data.length) {
     let html = '';
 	  data.forEach(doc => {
-		  const guide = doc.data();
-		  const li = `
-        <li>
-          <div class="collapsible-header grey lighten-4">${guide.title}</div>
-          <div class="collapsible-body white">${guide.content}</div>
-        </li>
+      console.log(doc.data())
+      const stock = doc.data();
+      const li = `
+      <li>
+      <div class="collapsible-header grey lighten-4">${stock.symbol}</div>
+      <div class="collapsible-body white">price: ${stock.price}</div>
+      <div class="collapsible-body white">buy: ${stock.buy}</div>
+      <div class="collapsible-body white">quantity: ${stock.quantity}</div>
+      </li>
       `;
+      console.log(li)
       html += li
     });
     guideList.innerHTML = html;
-
   } else {
+    console.log("no stocks")
     guideList.innerHTML = '<h5 class="center-align">Login to view guides</h5>'
   }
 }
