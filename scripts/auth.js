@@ -20,24 +20,33 @@ auth.onAuthStateChanged(user => {
     }
 });
 
-// create new guide
+// add new stock
 const createForm = document.querySelector('#create-form');
 createForm.addEventListener('submit', (e) => {
     e.preventDefault();
-
-    db.collection('guides').add({
-      title: createForm['title'].value,
-      content: createForm['content'].value
-    }).then(() => {
-      // close the modal and reset form
-      const modal = document.querySelector('#modal-create');
-      M.Modal.getInstance(modal).close();
-      createForm.reset();
-    // for the case a user which is not logge in tried to created a guide
-    }).catch(err => {
-      console.log(err.message)
-    })
-})
+    var user = firebase.auth().currentUser
+    db.collection('portfolios').get().then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        if (doc.data().user_id == user.uid) {
+          doc_id = doc.id
+          db.collection('portfolios').doc(doc_id).collection('stocks').add({
+            symbol: createForm['symbol'].value,
+            price: createForm['price'].value,
+            buy: createForm['buy'].value,
+            quantity: createForm['quantity'].value
+          }).then(() => {
+          // close the modal and reset form
+          const modal = document.querySelector('#modal-create');
+          M.Modal.getInstance(modal).close();
+          createForm.reset();
+        // for the case a user which is not logge in tried to created a guide
+        }).catch(err => {
+          console.log(err.message)
+        });
+      }
+    });
+  });
+});
 
 // logout
 const logout = document.querySelector('#logout');
