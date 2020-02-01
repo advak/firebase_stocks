@@ -58,18 +58,21 @@ signupWithGoogle.addEventListener('click', (e) => {
             user_id: result.user.uid
           });
         } else {
+          var has_portfolio = false;
           querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
             if (doc.data().user_id == result.user.uid) {
+              has_portfolio = true
               console.log(doc.id, " => ", doc.data().id);
-            } else {
-              db.collection('portfolios').add({
-                user_id: result.user.uid
-            });
+            }
+          });
+          if (has_portfolio == false) {
+            db.collection('portfolios').add({
+              user_id: result.user.uid
+          });
           }
-        });
-      }
-    })
+        }
+      });
   }).catch(function(err){
       console.log(err)
       console.log("Failed to link Google acount")
