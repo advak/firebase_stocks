@@ -10,15 +10,11 @@ auth.onAuthStateChanged(user => {
       // get() is an a-synchronous task. It takes sometime to do it. It returns a promise. So we use the then()
       // which fires a callback function when the get() is completed. the callback function takes in the response from the get()
       // get() sends back a snapshot of this collection
-      db.collection('portfolios').get().then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          if (doc.data().user_id == user.uid) {
-            doc_id = doc.id
-            db.collection('portfolios').doc(doc_id).collection('stocks').onSnapshot(snapshot => {
-              setupStocks(snapshot.docs);
-              setupUI(user);
-            });
-          }
+      db.collection('portfolios').where('user_id', '==', user.uid).onSnapshot(snapshot => {
+        // TODO: check why it is executed before and after first signup of user and returns a TypeError
+        db.collection('portfolios').doc(snapshot.docs[0].id).collection('stocks').onSnapshot(stocks => {
+        setupStocks(stocks.docs);
+        setupUI(user);
         });
     }, err => console.log(err.message));
     } else {
@@ -32,15 +28,12 @@ const createForm = document.querySelector('#create-form');
 createForm.addEventListener('submit', (e) => {
     e.preventDefault();
     var user = firebase.auth().currentUser
-    db.collection('portfolios').get().then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-        if (doc.data().user_id == user.uid) {
-          doc_id = doc.id
-          db.collection('portfolios').doc(doc_id).collection('stocks').add({
-            symbol: createForm['symbol'].value,
-            price: createForm['price'].value,
-            buy: createForm['buy'].value,
-            quantity: createForm['quantity'].value
+    db.collection('portfolios').where('user_id', '==', user.uid).get().then(function(portfolios) {
+      db.collection('portfolios').doc(portfolios.docs[0].id).collection('stocks').add ({
+          symbol: createForm['symbol'].value,
+          price: createForm['price'].value,
+          buy: createForm['buy'].value,
+          quantity: createForm['quantity'].value
           }).then(() => {
           // close the modal and reset form
           const modal = document.querySelector('#modal-create');
@@ -50,10 +43,8 @@ createForm.addEventListener('submit', (e) => {
         }).catch(err => {
           console.log(err.message)
         });
-      }
+      })
     });
-  });
-});
 
 // logout
 const logout = document.querySelector('#logout');
@@ -74,19 +65,13 @@ signupWithGoogle.addEventListener('click', (e) => {
             user_id: result.user.uid
           });
         } else {
-          var has_portfolio = false;
-          querySnapshot.forEach(function(doc) {
-            // doc.data() is never undefined for query doc snapshots
-            if (doc.data().user_id == result.user.uid) {
-              has_portfolio = true
-              console.log(doc.id, " => ", doc.data().id);
-            }
-          });
-          if (has_portfolio == false) {
-            db.collection('portfolios').add({
-              user_id: result.user.uid
-          });
+          db.collection('portfolios').where('user_id', '==', result.user.uid).get().then(function(portfolios) {
+            if (portfolios.empty) {
+              db.collection('portfolios').add({
+                user_id: result.user.uid
+            });
           }
+          });
         }
       });
   }).catch(function(err){

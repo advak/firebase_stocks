@@ -28,7 +28,6 @@ const setupStocks = (data) => {
   if (data.length) {
     let html = '';
 	  data.forEach(doc => {
-      console.log(doc.data())
       const stock = doc.data();
       const li = `
       <li>
@@ -43,8 +42,11 @@ const setupStocks = (data) => {
     });
     guideList.innerHTML = html;
   } else {
-    console.log("no stocks")
-    guideList.innerHTML = '<h5 class="center-align">Login to view guides</h5>'
+    if (user) {
+      guideList.innerHTML = '<h5 class="center-align">Add your stocks</h5>'
+    } else {
+      guideList.innerHTML = '<h5 class="center-align">Login to see your stocks</h5>'
+    }
   }
 }
 
