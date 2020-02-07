@@ -6,24 +6,22 @@
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <title>Get Stocker</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class="grey lighten-3">
 
   <!-- NAVBAR -->
   <nav class="z-depth-0 grey lighten-4">
     <div class="nav-wrapper container">
-      <a href="#" class="brand-logo">
+      <a href="#" class="brand-logo left">
         <img src="img/logo.svg" style="width: 180px; margin-top: 10px;">
       </a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <ul id="nav-mobile" class="right">
           <li class="logged-in" style="display: none;">
             <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
           </li>
           <li class="logged-in" style="display: none;">
             <a href="#" class="grey-text" id="logout">Logout</a>
-          </li>
-          <li class="logged-in" style="display: none;">
-            <a href="#" class="grey-text modal-trigger" data-target="modal-create">Create Stock</a>
           </li>
           <li class="logged-out" style="display: none;">
             <a href="#" class="grey-text" id="signup-with-google">Sign in</a>
@@ -71,6 +69,12 @@
   <div class="container" style="margin-top: 40px;">
     <ul class="collapsible z-depth-0 guides" style="border: none;">
     </ul>
+  </div>
+
+  <div class="fixed-action-btn">
+    <a href="#" class="logged-in btn-floating btn-large green modal-trigger" data-target="modal-create">
+      <i class="large material-icons">add</i>
+    </a>
   </div>
 
   <!-- The core Firebase JS SDK is always required and must be listed first -->

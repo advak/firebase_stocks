@@ -53,6 +53,14 @@ const setupStocks = (data) => {
 
 // setup materialize components
 document.addEventListener('DOMContentLoaded', function () {
+  var options = {
+    hoverEnabled: false
+
+  }
+
+  var elems = document.querySelectorAll('.fixed-action-btn');
+  var instances = M.FloatingActionButton.init(elems, options);
+
 
 	var modals = document.querySelectorAll('.modal');
 	M.Modal.init(modals);
