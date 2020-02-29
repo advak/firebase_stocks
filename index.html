@@ -4,32 +4,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="./css/index.css">
     <title>Get Stocker</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body class="grey lighten-3">
 
   <!-- NAVBAR -->
-  <nav class="z-depth-0 grey lighten-4">
+  <nav class="navatar z-depth-0 grey lighten-4">
     <div class="nav-wrapper container">
       <a href="#" class="brand-logo left">
         <img src="img/logo.svg" style="width: 180px; margin-top: 10px;">
       </a>
-      <ul id="nav-mobile" class="right">
-          <li class="logged-in" style="display: none;">
-            <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
-          </li>
-          <li class="logged-in" style="display: none;">
-            <a href="#" class="grey-text" id="logout">Logout</a>
-          </li>
+      <ul id="avatar" class="right">
+          
           <li class="logged-out" style="display: none;">
             <a href="#" class="grey-text" id="signup-with-google">Sign in</a>
           </li>
+          <li>
+            <a class='dropdown-trigger profile-pic logged-in' href='#' data-target='dropdown1'></a>
+          </li>
+
         </span>
       </ul>
     </div>
   </nav>
+
+  <!-- Dropdown Structure -->
+  <ul id='dropdown1' class='dropdown-content'>
+    <li class="logged-in" style="display: none;">
+      <a href="#" class="modal-trigger" data-target="modal-account">Account</a>
+    </li>
+    <li class="logged-in" style="display: none;">
+      <a href="#" class="grey-text" id="logout">Logout</a>
+    </li>
+  </ul>
 
   <!-- ACCOUNT MODAL -->
   <div id="modal-account" class="modal">
@@ -39,28 +48,36 @@
     </div>
   </div>
 
-  <!-- CREATE GUIDE MODAL -->
+  <!-- ADD STOCK MODAL -->
   <div id="modal-create" class="modal">
     <div class="modal-content">
       <h4>Add Stock</h4><br />
       <form id="create-form">
         <div class="input-field">
-          <input type="text" id="symbol" required>
+          <input type="text" id="symbol" required class="validate uppercase"></input>
           <label for="symbol">Symbol</label>
         </div>
         <div class="input-field">
-          <textarea id="price" class="materialize-textarea" required></textarea>
+          <input id="price" class="validate" required type="number" step="0.01"></input>
           <label for="price">Price</label>
         </div>
         <div class="input-field">
-          <textarea id="quantity" class="materialize-textarea" required></textarea>
+          <input id="quantity" class="validate" required type="number" step></input>
           <label for="quantity">Quantity</label>
         </div>
         <div class="input-field">
-          <textarea id="buy" class="materialize-textarea" required></textarea>
-          <label for="buy">Buy</label>
+          <input id="date" class="validate" required type="date"></input>
+          <label for="date">Date</label>
         </div>
-        <button class="btn yellow darken-2 z-depth-0">Create</button>
+        <div class="switch">
+          <label>
+            Sell
+            <input id="buy" checked type="checkbox">
+            <span class="lever"></span>
+            Buy
+          </label>
+        </div>
+        <button class="btn z-depth-0">Create</button>
       </form>
     </div>
   </div>
@@ -72,7 +89,7 @@
   </div>
 
   <div class="fixed-action-btn">
-    <a href="#" class="logged-in btn-floating btn-large green modal-trigger" data-target="modal-create">
+    <a href="#" class="logged-in btn-floating btn-large modal-trigger" data-target="modal-create">
       <i class="large material-icons">add</i>
     </a>
   </div>
@@ -100,8 +117,8 @@
   </script>
 
   <!-- Compiled and minified JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script src="scripts/index.js"></script>
-  <script src="scripts/auth.js"></script>
+  <script src="js/bin/materialize.min.js"></script>
+  <script src="js/index.js"></script>
+  <script src="js/auth.js"></script>
 </body>
 </html>

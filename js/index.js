@@ -2,6 +2,8 @@ const guideList = document.querySelector('.guides');
 const loggedOutLinks = document.querySelectorAll('.logged-out');
 const loggedInLinks = document.querySelectorAll('.logged-in');
 const accountDetails = document.querySelector('.account-details');
+const photo = document.querySelector('.profile-pic');
+
 
 const setupUI = (user) => {
   if (user) {
@@ -9,13 +11,16 @@ const setupUI = (user) => {
     const html = `
       <div>Loggen in as ${user.email}</div>
     `;
+    const photohtml = `<img src="${user.photoURL}" alt="" class="circle">`;
     accountDetails.innerHTML = html;
+    photo.innerHTML = photohtml;
     // toggle UI elements
     loggedInLinks.forEach(item => item.style.display = 'block');
     loggedOutLinks.forEach(item => item.style.display = 'none');
   } else {
     // hide account info
     accountDetails.innerHTML = '';
+    photo.innerHTML = '';
     // toggle UI elements
     loggedOutLinks.forEach(item => item.style.display = 'block');
     loggedInLinks.forEach(item => item.style.display = 'none');
@@ -57,15 +62,20 @@ document.addEventListener('DOMContentLoaded', function () {
     hoverEnabled: false
 
   }
+  var drop_options = {
+    coverTrigger:false,
+    constrainWidth: false
+  }
 
-  var elems = document.querySelectorAll('.fixed-action-btn');
-  var instances = M.FloatingActionButton.init(elems, options);
-
+  var elements = document.querySelectorAll('.fixed-action-btn');
+  M.FloatingActionButton.init(elements, options);
 
 	var modals = document.querySelectorAll('.modal');
 	M.Modal.init(modals);
 
 	var items = document.querySelectorAll('.collapsible');
-	M.Collapsible.init(items);
-
+  M.Collapsible.init(items);
+  
+  var elems = document.querySelectorAll('.dropdown-trigger');
+  var instances = M.Dropdown.init(elems, drop_options);
 });

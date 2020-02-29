@@ -30,10 +30,11 @@ createForm.addEventListener('submit', (e) => {
     var user = firebase.auth().currentUser
     db.collection('portfolios').where('user_id', '==', user.uid).get().then(function(portfolios) {
       db.collection('portfolios').doc(portfolios.docs[0].id).collection('stocks').add ({
-          symbol: createForm['symbol'].value,
+          symbol: createForm['symbol'].value.toUpperCase(),
           price: createForm['price'].value,
           buy: createForm['buy'].value,
-          quantity: createForm['quantity'].value
+          quantity: createForm['quantity'].value,
+          date: createForm['date'].value
           }).then(() => {
           // close the modal and reset form
           const modal = document.querySelector('#modal-create');
@@ -68,7 +69,8 @@ signupWithGoogle.addEventListener('click', (e) => {
           db.collection('portfolios').where('user_id', '==', result.user.uid).get().then(function(portfolios) {
             if (portfolios.empty) {
               db.collection('portfolios').add({
-                user_id: result.user.uid
+                user_id: result.user.uid,
+                user_email: result.user.email
             });
           }
           });
