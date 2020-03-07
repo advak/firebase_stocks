@@ -63,14 +63,17 @@ signupWithGoogle.addEventListener('click', (e) => {
       db.collection('portfolios').get().then(function(querySnapshot) {
         if (querySnapshot.empty) {
           db.collection('portfolios').add({
-            user_id: result.user.uid
+            user_id: result.user.uid,
+            user_email: result.user.email,
+            send_email: true
           });
         } else {
           db.collection('portfolios').where('user_id', '==', result.user.uid).get().then(function(portfolios) {
             if (portfolios.empty) {
               db.collection('portfolios').add({
                 user_id: result.user.uid,
-                user_email: result.user.email
+                user_email: result.user.email,
+                send_email: true
             });
           }
           });

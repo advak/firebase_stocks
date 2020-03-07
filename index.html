@@ -33,19 +33,35 @@
   <!-- Dropdown Structure -->
   <ul id='dropdown1' class='dropdown-content'>
     <li class="logged-in" style="display: none;">
-      <a href="#" class="modal-trigger" data-target="modal-account">Account</a>
+      <a href="#" id="settings" class="modal-trigger" data-target="modal-account">Settings</a>
     </li>
     <li class="logged-in" style="display: none;">
       <a href="#" class="grey-text" id="logout">Logout</a>
     </li>
   </ul>
 
+
   <!-- ACCOUNT MODAL -->
   <div id="modal-account" class="modal">
-    <div class="modal-content center-align">
-      <h4>Account details</h4><br />
-      <div class="account-details"></div>
+    <div class="modal-header">
+      <a href="#!" class="modal-close btn-flat right">x</a>
     </div>
+    <div class="modal-content center-align">
+      <h4>Settings</h4><br />
+      <div class="center-align row">
+        <div class="col s6">Send daily email</div>
+        <div class="col s6">
+          <div class="switch">
+              <label>
+                Off
+                <input id="email" checked type="checkbox">
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+        </div>
+    </div>
+  </div>
   </div>
 
   <!-- ADD STOCK MODAL -->

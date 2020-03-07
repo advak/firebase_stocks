@@ -1,25 +1,19 @@
 const guideList = document.querySelector('.guides');
 const loggedOutLinks = document.querySelectorAll('.logged-out');
 const loggedInLinks = document.querySelectorAll('.logged-in');
-const accountDetails = document.querySelector('.account-details');
 const photo = document.querySelector('.profile-pic');
 
 
 const setupUI = (user) => {
   if (user) {
     // acount info
-    const html = `
-      <div>Loggen in as ${user.email}</div>
-    `;
     const photohtml = `<img src="${user.photoURL}" alt="" class="circle">`;
-    accountDetails.innerHTML = html;
     photo.innerHTML = photohtml;
     // toggle UI elements
     loggedInLinks.forEach(item => item.style.display = 'block');
     loggedOutLinks.forEach(item => item.style.display = 'none');
   } else {
     // hide account info
-    accountDetails.innerHTML = '';
     photo.innerHTML = '';
     // toggle UI elements
     loggedOutLinks.forEach(item => item.style.display = 'block');
@@ -42,7 +36,6 @@ const setupStocks = (data) => {
       <div class="collapsible-body white">quantity: ${stock.quantity}</div>
       </li>
       `;
-      console.log(li)
       html += li
     });
     guideList.innerHTML = html;
@@ -54,6 +47,34 @@ const setupStocks = (data) => {
     }
   }
 }
+
+const settings_btn = document.querySelector('#settings');
+settings_btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    var status = db.collection('portfolios').where('user_id', '==', firebase.auth().currentUser.uid).get().then(function(doc) {
+      return doc.docs[0].data()["send_email"]
+    }).then( function(d) {
+    changeEmailSettings(d);
+
+    })
+})
+
+function changeEmailSettings(status) {
+  const email_status_btn = document.querySelector('#email');
+  document.getElementById("email").checked = status;
+  email_status_btn.addEventListener('change', function() {
+    if (this.checked) {
+      db.collection('portfolios').where('user_id', '==', firebase.auth().currentUser.uid).get().then(function(portfolios) {
+        db.collection('portfolios').doc(portfolios.docs[0].id).set({send_email: true}, { merge: true })
+      })
+
+    } else {
+      db.collection('portfolios').where('user_id', '==', firebase.auth().currentUser.uid).get().then(function(portfolios) {
+        db.collection('portfolios').doc(portfolios.docs[0].id).set({send_email: false}, { merge: true })
+      })
+    }
+  });
+};
 
 
 // setup materialize components
