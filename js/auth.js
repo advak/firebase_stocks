@@ -32,7 +32,7 @@ createForm.addEventListener('submit', (e) => {
       db.collection('portfolios').doc(portfolios.docs[0].id).collection('stocks').add ({
           symbol: createForm['symbol'].value.toUpperCase(),
           price: createForm['price'].value,
-          buy: createForm['buy'].value,
+          buy: createForm['buy'].checked,
           quantity: createForm['quantity'].value,
           date: createForm['date'].value
           }).then(() => {
